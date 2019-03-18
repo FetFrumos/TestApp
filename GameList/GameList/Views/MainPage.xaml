@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="GameList.Views.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:translate="clr-namespace:GameList.Core.Translate;assembly=GameList"
+    Title="{Binding Title}"
+    Padding="20">
+
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+
+        <SearchBar
+            x:Name="SearchBar"
+            SearchCommand="{Binding SearchCommand}"
+            SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}"
+            Text="{Binding TextSearch}" />
+
+        <ListView ItemsSource="{Binding GameTitles}" SelectedItem="{Binding SelectedItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Image Aspect="AspectFill" Source="{Binding ImagePath}" />
+                            <Label
+                                Text="{Binding Name}"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding AddCommand}"
+            Icon="add"
+            Text="{translate:Translate Add}" />
+
+        <ToolbarItem
+            Command="{Binding DeleteCommand}"
+            Icon="delete"
+            Text="{translate:Translate Delete}" />
+
+        <ToolbarItem
+            Command="{Binding DevicesCommand}"
+            Icon="connect"
+            Text="{translate:Translate Devices}" />
+
+        <ToolbarItem
+            Command="{Binding SendCommand}"
+            Icon="mail"
+            Text="{translate:Translate Send}" />
+
+    </ContentPage.ToolbarItems>
+
+</ContentPage>
