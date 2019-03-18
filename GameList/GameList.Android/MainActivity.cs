@@ -28,7 +28,7 @@ namespace GameList.Droid
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
 	    DeviceDiscoveredReceiver _receiver;
-	    BluetoothAdapter btAdapter;
+	    BluetoothAdapter _btAdapter;
 	    public static readonly int PickImageId = 1000;
 	    private BlManager _blManager;
 		public static TaskCompletionSource<Tuple<Stream,string>> PickImageTaskCompletionSource { set; get; }
@@ -42,8 +42,12 @@ namespace GameList.Droid
 			AndroidEnvironment.UnhandledExceptionRaiser += MyApp_UnhandledExceptionHandler;
 			global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App(new AndroidInitializer()));
-	        btAdapter = BluetoothAdapter.DefaultAdapter;
-			_blManager = new BlManager();
+	        _btAdapter = BluetoothAdapter.DefaultAdapter;
+	        if (_btAdapter !=null)
+	        {
+				_blManager = new BlManager();
+			}
+			
 	        /*var pairedDevices = btAdapter.BondedDevices;
 	        if (pairedDevices.Count == 0)
 	        {
@@ -75,7 +79,7 @@ namespace GameList.Droid
 				
 		        var x = btAdapter.StartDiscovery();*/
 
-		        var pairedDevices = btAdapter.BondedDevices;
+		        var pairedDevices = _btAdapter.BondedDevices;
 		        if (pairedDevices.Count == 0)
 		        {
 			        _receiver = new DeviceDiscoveredReceiver(null);
@@ -109,20 +113,20 @@ namespace GameList.Droid
 		protected override void OnResume()
 	    {
 			base.OnResume();
-			_blManager.OnResume();
+			_blManager?.OnResume();
 	    }
 
 
 	    protected override void OnStart()
 	    {
 		    base.OnResume();
-		    _blManager.OnStart();
+		    _blManager?.OnStart();
 	    }
 
 		protected override void OnDestroy()
 	    {
 		    base.OnDestroy();
-		    _blManager.OnDestroy();
+		    _blManager?.OnDestroy();
 			UnregisterReceiver(_receiver);
 		}
 

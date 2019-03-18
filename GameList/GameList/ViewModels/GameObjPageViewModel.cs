@@ -26,7 +26,7 @@ namespace GameList.ViewModels
 			_picker = picker;
 		}
 
-
+		
 		#region prop
 
 		private string _name;
@@ -68,7 +68,20 @@ namespace GameList.ViewModels
 		public DelegateCommand SelectImgCommand { get; }
 		private async void SelectImgCommandExecute()
 		{
+			var status = await AppUtils.GetPermission(Permission.Storage, async () =>
+				{
+					await Dialog.DisplayAlertAsync(AppRes.AppTitle, AppRes.NeedStore, AppRes.Ok);
+				}
+			);
+
+			if (status != PermissionStatus.Granted)
+			{
+				await Dialog.DisplayAlertAsync(AppRes.AppTitle, AppRes.NeedStore, AppRes.Ok);
+				return;
+			}
 			var res = await _picker.GetImageStreamAsync();
+			if(res==null)
+				return;
 			if (!string.IsNullOrEmpty(res.Item2))
 			{
 				_imagePath = res.Item2;
